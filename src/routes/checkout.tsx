@@ -29,6 +29,12 @@ function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [placed, setPlaced] = useState(false);
 
+  const totalQty = items.reduce((s, i) => s + i.qty, 0);
+  const discountPct = totalQty >= 10 ? 20 : 0;
+  const discountAmount = Math.round((total * discountPct) / 100);
+  const deliveryCharges = 350;
+  const grandTotal = total - discountAmount + deliveryCharges;
+
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((p) => ({ ...p, [k]: e.target.value }));
 
@@ -165,10 +171,34 @@ function CheckoutPage() {
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex justify-between border-t border-border pt-4 text-sm">
-            <span className="text-muted-foreground">Total</span>
-            <span className="text-lg font-bold text-brand">Rs {total.toLocaleString()}</span>
+          <div className="mt-4 space-y-2 border-t border-border pt-4 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span className="font-medium text-foreground">Rs {total.toLocaleString()}</span>
+            </div>
+            {discountPct > 0 && (
+              <div className="flex justify-between text-brand">
+                <span>Bulk Discount ({discountPct}% off — 10+ suits)</span>
+                <span className="font-semibold">- Rs {discountAmount.toLocaleString()}</span>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Delivery Charges</span>
+              <span className="font-medium text-foreground">Rs {deliveryCharges.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between border-t border-border pt-2">
+              <span className="font-semibold text-foreground">Grand Total</span>
+              <span className="text-lg font-bold text-brand">Rs {grandTotal.toLocaleString()}</span>
+            </div>
           </div>
+          <div className="mt-4 rounded-lg bg-destructive/10 p-3 text-xs font-medium text-destructive">
+            ⚠️ Sirf wohi order karein jo Rs {deliveryCharges} delivery charges de sakta ho.
+          </div>
+          {totalQty < 10 && (
+            <div className="mt-2 rounded-lg bg-brand/10 p-3 text-xs font-medium text-brand">
+              💡 Aur {10 - totalQty} suit add karein aur 20% OFF payein!
+            </div>
+          )}
         </aside>
       </div>
     </div>
