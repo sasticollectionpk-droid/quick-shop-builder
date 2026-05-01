@@ -7,9 +7,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur">
       <div className="bg-brand text-primary-foreground">
-        <div className="container mx-auto flex items-center justify-center gap-2 px-4 py-1.5 text-xs font-medium">
-          <Phone className="h-3.5 w-3.5" />
-          <a href="tel:+923049116786" className="hover:underline">
+        <div className="container mx-auto flex flex-col items-center justify-center gap-1 px-4 py-1.5 text-xs font-medium sm:flex-row sm:gap-4">
+          <span className="font-semibold">🎉 Buy 10 suits & get 20% OFF!</span>
+          <span className="hidden sm:inline">•</span>
+          <a href="tel:+923049116786" className="flex items-center gap-1.5 hover:underline">
+            <Phone className="h-3.5 w-3.5" />
             Call / WhatsApp: 0304-9116786
           </a>
         </div>
