@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { X, Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
@@ -55,9 +56,13 @@ export function CartDrawer() {
               <span className="text-muted-foreground">Total</span>
               <span className="text-lg font-bold text-foreground">Rs {total.toLocaleString()}</span>
             </div>
-            <button className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
+            <Link
+              to="/checkout"
+              onClick={() => setOpen(false)}
+              className="block w-full rounded-full bg-brand py-3 text-center text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            >
               Checkout
-            </button>
+            </Link>
             <button onClick={clear} className="mt-2 w-full text-xs text-muted-foreground hover:underline">
               Clear cart
             </button>
