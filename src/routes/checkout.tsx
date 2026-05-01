@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { useCart } from "@/context/CartContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -54,10 +55,7 @@ function CheckoutPage() {
     setErrors({});
     setSubmitting(true);
     try {
-      const res = await fetch("/api/public/place-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const { error } = await supabase.from("orders").insert({
           customer_name: result.data.name,
           phone: result.data.phone,
           address: result.data.address,
@@ -73,11 +71,10 @@ function CheckoutPage() {
           discount: discountAmount,
           delivery_charges: deliveryCharges,
           grand_total: grandTotal,
-        }),
       });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Order failed");
+
+      if (error) {
+        throw new Error(error.message || "Order failed");
       }
       setPlaced(true);
       clear();

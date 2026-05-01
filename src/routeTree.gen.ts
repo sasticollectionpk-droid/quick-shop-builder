@@ -19,7 +19,6 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as ApiPublicPlaceOrderRouteImport } from './routes/api/public/place-order'
 
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
@@ -71,11 +70,6 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
-const ApiPublicPlaceOrderRoute = ApiPublicPlaceOrderRouteImport.update({
-  id: '/api/public/place-order',
-  path: '/api/public/place-order',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,7 +82,6 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/': typeof AdminIndexRoute
-  '/api/public/place-order': typeof ApiPublicPlaceOrderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,7 +93,6 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin': typeof AdminIndexRoute
-  '/api/public/place-order': typeof ApiPublicPlaceOrderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,7 +106,6 @@ export interface FileRoutesById {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/': typeof AdminIndexRoute
-  '/api/public/place-order': typeof ApiPublicPlaceOrderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,7 +120,6 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/'
-    | '/api/public/place-order'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -141,7 +131,6 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin'
-    | '/api/public/place-order'
   id:
     | '__root__'
     | '/'
@@ -154,7 +143,6 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/'
-    | '/api/public/place-order'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -164,7 +152,6 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
   ShopRoute: typeof ShopRoute
-  ApiPublicPlaceOrderRoute: typeof ApiPublicPlaceOrderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -239,13 +226,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/api/public/place-order': {
-      id: '/api/public/place-order'
-      path: '/api/public/place-order'
-      fullPath: '/api/public/place-order'
-      preLoaderRoute: typeof ApiPublicPlaceOrderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -272,7 +252,6 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
   ShopRoute: ShopRoute,
-  ApiPublicPlaceOrderRoute: ApiPublicPlaceOrderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
