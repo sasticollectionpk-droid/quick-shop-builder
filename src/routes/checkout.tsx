@@ -183,11 +183,15 @@ function CheckoutPage() {
             {errors.city && <p className="mt-1 text-xs text-destructive">{errors.city}</p>}
           </div>
 
+          {errors.submit && (
+            <p className="rounded-lg bg-destructive/10 p-3 text-xs font-medium text-destructive">{errors.submit}</p>
+          )}
           <button
             type="submit"
-            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            disabled={submitting}
+            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
           >
-            Place Order (Cash on Delivery)
+            {submitting ? "Placing Order..." : "Place Order (Cash on Delivery)"}
           </button>
         </form>
 
