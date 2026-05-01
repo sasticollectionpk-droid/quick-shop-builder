@@ -1,8 +1,15 @@
+import { useNavigate } from "@tanstack/react-router";
 import type { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
 export function ProductCard({ product }: { product: Product }) {
-  const { add } = useCart();
+  const { add, setOpen } = useCart();
+  const navigate = useNavigate();
+  const buyNow = () => {
+    add(product);
+    setOpen(false);
+    navigate({ to: "/checkout" });
+  };
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl bg-card shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-soft)]">
       <div className="relative aspect-square overflow-hidden bg-muted">
@@ -41,7 +48,7 @@ export function ProductCard({ product }: { product: Product }) {
             Add to Cart
           </button>
           <button
-            onClick={() => add(product)}
+            onClick={buyNow}
             className="rounded-full bg-brand px-3 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
           >
             Buy Now
