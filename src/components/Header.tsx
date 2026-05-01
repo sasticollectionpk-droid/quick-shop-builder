@@ -1,11 +1,19 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Phone } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 export function Header() {
   const { count, setOpen } = useCart();
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur">
+      <div className="bg-brand text-primary-foreground">
+        <div className="container mx-auto flex items-center justify-center gap-2 px-4 py-1.5 text-xs font-medium">
+          <Phone className="h-3.5 w-3.5" />
+          <a href="tel:+923001234567" className="hover:underline">
+            Call / WhatsApp: +92 300 1234567
+          </a>
+        </div>
+      </div>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
           <span className="font-[var(--font-display)] text-2xl font-bold tracking-tight text-brand">
