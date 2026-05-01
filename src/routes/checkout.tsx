@@ -38,7 +38,9 @@ function CheckoutPage() {
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = orderSchema.safeParse(form);
     if (!result.success) {
@@ -50,8 +52,40 @@ function CheckoutPage() {
       return;
     }
     setErrors({});
-    setPlaced(true);
-    clear();
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/public/place-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer_name: result.data.name,
+          phone: result.data.phone,
+          address: result.data.address,
+          city: result.data.city,
+          items: items.map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: i.price,
+            qty: i.qty,
+            image: i.image,
+          })),
+          subtotal: total,
+          discount: discountAmount,
+          delivery_charges: deliveryCharges,
+          grand_total: grandTotal,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Order failed");
+      }
+      setPlaced(true);
+      clear();
+    } catch (err) {
+      setErrors({ submit: err instanceof Error ? err.message : "Could not place order. Try again." });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (placed) {
@@ -149,11 +183,15 @@ function CheckoutPage() {
             {errors.city && <p className="mt-1 text-xs text-destructive">{errors.city}</p>}
           </div>
 
+          {errors.submit && (
+            <p className="rounded-lg bg-destructive/10 p-3 text-xs font-medium text-destructive">{errors.submit}</p>
+          )}
           <button
             type="submit"
-            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            disabled={submitting}
+            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
           >
-            Place Order (Cash on Delivery)
+            {submitting ? "Placing Order..." : "Place Order (Cash on Delivery)"}
           </button>
         </form>
 
