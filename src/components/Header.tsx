@@ -9,8 +9,8 @@ export function Header() {
       <div className="bg-brand text-primary-foreground">
         <div className="container mx-auto flex items-center justify-center gap-2 px-4 py-1.5 text-xs font-medium">
           <Phone className="h-3.5 w-3.5" />
-          <a href="tel:+923001234567" className="hover:underline">
-            Call / WhatsApp: +92 300 1234567
+          <a href="tel:+923049116786" className="hover:underline">
+            Call / WhatsApp: 0304-9116786
           </a>
         </div>
       </div>
