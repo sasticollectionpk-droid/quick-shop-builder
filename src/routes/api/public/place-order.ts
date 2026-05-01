@@ -42,8 +42,19 @@ export const Route = createFileRoute("/api/public/place-order")({
           }
           const data = parsed.data;
 
-          const supabaseUrl = process.env.SUPABASE_URL!;
-          const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+          const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+          const serviceKey =
+            process.env.SUPABASE_SERVICE_ROLE_KEY ||
+            process.env.SUPABASE_PUBLISHABLE_KEY ||
+            process.env.SUPABASE_ANON_KEY;
+
+          if (!supabaseUrl || !serviceKey) {
+            console.error("Missing Supabase server credentials for order insert");
+            return new Response(JSON.stringify({ error: "Order service not configured" }), {
+              status: 500,
+              headers: { "Content-Type": "application/json" },
+            });
+          }
           const supabase = createClient(supabaseUrl, serviceKey, {
             auth: { autoRefreshToken: false, persistSession: false },
           });
@@ -66,6 +77,15 @@ export const Route = createFileRoute("/api/public/place-order")({
 
           if (error) {
             console.error("DB insert failed:", error);
+            if (error.code === "42501") {
+              return new Response(
+                JSON.stringify({ error: "Order insert blocked by RLS. Apply project migrations or add an INSERT policy on public.orders for anon/authenticated." }),
+                {
+                  status: 500,
+                  headers: { "Content-Type": "application/json" },
+                },
+              );
+            }
             return new Response(JSON.stringify({ error: "Could not save order" }), {
               status: 500,
               headers: { "Content-Type": "application/json" },

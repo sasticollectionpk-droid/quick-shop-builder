@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ProductCard } from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { useProducts } from "@/data/products";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const { products, loading } = useProducts();
+
   return (
     <div>
       {/* All Products */}
@@ -20,11 +22,15 @@ function Index() {
             View all →
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
+        {loading ? (
+          <p className="text-sm text-muted-foreground">Loading products...</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
+            {products.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Promise */}

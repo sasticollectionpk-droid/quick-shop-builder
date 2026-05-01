@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ProductCard } from "@/components/ProductCard";
-import { products } from "@/data/products";
+import { useProducts } from "@/data/products";
 
 export const Route = createFileRoute("/shop")({
   head: () => ({
@@ -13,10 +13,10 @@ export const Route = createFileRoute("/shop")({
   component: Shop,
 });
 
-const categories = ["All", "Women", "Men", "Unstitched"] as const;
-
 function Shop() {
-  const [cat, setCat] = useState<(typeof categories)[number]>("All");
+  const { products, loading } = useProducts();
+  const categories = ["All", ...Array.from(new Set(products.map((p) => p.category)))];
+  const [cat, setCat] = useState<string>("All");
   const list = cat === "All" ? products : products.filter((p) => p.category === cat);
   return (
     <div className="container mx-auto px-4 py-12">
@@ -32,16 +32,20 @@ function Shop() {
               cat === c ? "bg-brand text-primary-foreground" : "bg-secondary text-foreground hover:bg-accent"
             }`}
           >
-            {c}
+            {c === "All" ? c : c.charAt(0).toUpperCase() + c.slice(1)}
           </button>
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-        {list.map((p) => (
-          <ProductCard key={p.id} product={p} />
-        ))}
-      </div>
+      {loading ? (
+        <p className="mt-8 text-sm text-muted-foreground">Loading products...</p>
+      ) : (
+        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+          {list.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
