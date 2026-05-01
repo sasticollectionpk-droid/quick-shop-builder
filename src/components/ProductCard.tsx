@@ -25,20 +25,26 @@ export function ProductCard({ product }: { product: Product }) {
           <p className="text-xs uppercase tracking-wider text-muted-foreground">{product.category}</p>
           <h3 className="mt-1 font-semibold text-foreground">{product.name}</h3>
         </div>
-        <div className="mt-auto flex items-center justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-foreground">Rs {product.price.toLocaleString()}</span>
-            {product.oldPrice && (
-              <span className="text-sm text-muted-foreground line-through">
-                Rs {product.oldPrice.toLocaleString()}
-              </span>
-            )}
-          </div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-lg font-bold text-foreground">Rs {product.price.toLocaleString()}</span>
+          {product.oldPrice && (
+            <span className="text-sm text-muted-foreground line-through">
+              Rs {product.oldPrice.toLocaleString()}
+            </span>
+          )}
+        </div>
+        <div className="mt-auto grid grid-cols-2 gap-2 pt-2">
           <button
             onClick={() => add(product)}
-            className="rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background transition hover:bg-brand"
+            className="rounded-full border border-foreground px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-secondary"
           >
-            Add
+            Add to Cart
+          </button>
+          <button
+            onClick={() => add(product)}
+            className="rounded-full bg-brand px-3 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
+          >
+            Buy Now
           </button>
         </div>
       </div>

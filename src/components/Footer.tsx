@@ -20,7 +20,7 @@ export function Footer() {
           <h4 className="text-sm font-semibold text-foreground">Contact</h4>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
             <li>support@sasticollection.pk</li>
-            <li>+92 300 1234567</li>
+            <li>0304-9116786</li>
             <li>Karachi, Pakistan</li>
           </ul>
         </div>
